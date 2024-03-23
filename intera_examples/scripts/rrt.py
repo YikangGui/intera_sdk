@@ -9,12 +9,13 @@ import time
 from object_detection import RobotCollisionDetection
 from utils import *
 
-# np.random.seed(0)
-# random.seed(0)
+np.random.seed(0)
+random.seed(0)
+np.set_printoptions(precision=2, suppress=True)
 
 
-JOINTS_LIMITS = {'low': np.array([-2.0, -0.75, -3.04, -0.5, -1, -0.5, -0.05]),
-                 'high': np.array([1.0, 0.5, 3.04, 2, 1, 1.5, 0.05])}
+JOINTS_LIMITS = {'low': np.array([ -2.5, -2.0, -1.5, -0.5, -0.5, -0.5, -0.01]),
+                 'high': np.array([ 1.0,  0.5,  0.5,  2.5,  2.0,  2.0,  0.01])}
 
 
 class RRTNode:
@@ -58,7 +59,7 @@ class RRTNodeList:
 
 
 class RRT:
-    def __init__(self, goal_pos, goal_range, init_pos, joints_limits=JOINTS_LIMITS, step_size=0.1, sample_goal_pos_prob=0.5):
+    def __init__(self, goal_pos, goal_range, init_pos, joints_limits=JOINTS_LIMITS, step_size=0.1, sample_goal_pos_prob=0.25):
         self.step_size = step_size
         self.init_pos = init_pos
         self.collision_detection = RobotCollisionDetection()
@@ -171,11 +172,11 @@ class RRT:
             print('Invalid Goal Pos')
             return False, []
         
-        if (self.joints_limits.low <= self.init_pos).all() and (self.init_pos <= self.joints_limits.high).all():
-            pass
-        else:
-            print('Invalid Init Pos')
-            return False, []
+        # if (self.joints_limits.low <= self.init_pos).all() and (self.init_pos <= self.joints_limits.high).all():
+        #     pass
+        # else:
+        #     print('Invalid Init Pos')
+        #     return False, []
 
 
         goal_collision = self.check_collision(self.goal_pos)
@@ -481,16 +482,22 @@ class RRTConnect(RRT):
         return goal_reached, self.get_path()
 
 if __name__ == '__main__':
-    goal_pos = np.array([-2.10, 1.21, -2.34, 1.63, -1.11, -2.96, 0])
-    init_pos = np.array([0.28, 0.33, -1.30, 1.31, 1.83, 1.24, 0])
-    goal_range = {'low': goal_pos - 0.1,
-                  'high': goal_pos + 0.1}
-    joints_limits = {'low': np.array([-3.05, -3.8, -3.04, -3.04, -2.97, -2.97, -4.71]),
-                     'high': np.array([3.05, 2.27, 3.04, 3.04, 2.97, 2.97, 4.71])}
+    home_pos = np.array([0.00, -0.53, -0.46, 1.29, 0.51, 0.94, 0])
 
-    path_planner = RRT(goal_pos=goal_pos, init_pos=init_pos, goal_range=goal_range, joints_limits=joints_limits, step_size=0.1)
-    # path_planner = RRTConnect(goal_pos=goal_pos, init_pos=init_pos, goal_range=goal_range, joints_limits=joints_limits, step_size=0.2)
-    goal_reached, path = path_planner.main()
+    bin_pos = np.array([-1.52, -0.49, -0.43, 1.50, 0.50, 0.71, 0])
+
+    pick_pos = np.array([-0.01, -0.28, -0.39, 1.21, 0.52, 0.78, 0])
+
+    init_pos = pick_pos
+    goal_pos = bin_pos
+
+    goal_range = {'low': goal_pos - 0.15,
+                  'high': goal_pos + 0.15}
+
+    path_planner = RRT(goal_pos=goal_pos, init_pos=init_pos, goal_range=goal_range)
+    goal_reached, path = path_planner.main(optimized=False)
+    for node in path:
+        print(node.node)
     # path_planner.get_smoothness(path)
     # print(len(path))
     # path_planner.render(path)

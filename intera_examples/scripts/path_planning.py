@@ -71,8 +71,8 @@ def main():
         # test pos
         test_pos = np.array([0, -0.45, -0.27, 0.8, 0.18, 1, 0])
 
-        init_pos = current_pos
-        goal_pos = pick_pos
+        init_pos = home_pos
+        goal_pos = home_pos
         
         print(f'Init pos: {init_pos}')
         print(f'Goal pos: {goal_pos}')

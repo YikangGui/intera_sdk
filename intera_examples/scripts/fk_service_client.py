@@ -38,8 +38,7 @@ def fk_service_client(limb = "right"):
     joints = JointState()
     joints.name = ['right_j0', 'right_j1', 'right_j2', 'right_j3',
                    'right_j4', 'right_j5', 'right_j6']
-    joints.position = [0.763331, 0.415979, -1.728629, 1.482985,
-                       -1.135621, -1.674347, -0.496337]
+    joints.position = [0.00, -0.53, -0.46, 1.29, 0.51, 0.94, 0]
     # Add desired pose for forward kinematics
     fkreq.configuration.append(joints)
     # Request forward kinematics from base to "right_hand" link

@@ -24,11 +24,11 @@ class RobotCollisionDetection():
 
         conveyor_path = '/home/yikang/catkin_ws/src/sawyer_irl_project/meshes/lab_conveyor/conveyor_assembly.stl'
         self.conveyor_mesh = trimesh.load_mesh(conveyor_path)
-        self.conveyor_transform = Transform(pos=[-0.55, -0.3, -0.13], rot=[np.pi, np.pi, np.pi, np.pi])
+        self.conveyor_transform = Transform(pos=[-0.47, -0.5, -0.29], rot=[np.pi, np.pi, np.pi, np.pi])
 
         obstacle_path = '/home/yikang/pykin/pykin/assets/objects/meshes/bin_15.stl'
         self.obstacle_mesh = trimesh.load_mesh(obstacle_path)
-        self.obstacle_transform = Transform(pos=[0.8, -0.1, 0.5], rot=[0, 0, 0])
+        self.obstacle_transform = Transform(pos=[0.8, -0.3, 0.35], rot=[0, 0, 0])
 
         self.o_manager = CollisionManager()
         self.o_manager.add_object("conveyor", gtype="mesh", gparam=self.conveyor_mesh, h_mat=self.conveyor_transform.h_mat)
